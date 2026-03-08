@@ -24,24 +24,26 @@ jobs:
           git config --global user.email "anhbao@example.com"
           git config --global user.name "Anh Bao Nam Dinh"
 
-            - name: Sync Source Halium 13 và Device Tree
+            - name: Đồng bộ nguồn Halium 13 và Device Tree
         run: |
           mkdir halium && cd halium
+          # Tải công cụ repo riêng để không bị lỗi quyền ghi
           curl https://storage.googleapis.com/git-repo-downloads/repo > repo
           chmod a+x repo
-          # Khởi tạo đúng nhánh Halium 13
+          # Khởi tạo đúng nhánh Halium 13 cho anh Bảo
           ./repo init -u https://github.com/Halium/android -b halium-13.0 --depth=1
-          # Tải bản thiết kế (Device Tree) của Redmi 13C
+          # Kéo Device Tree của Redmi 13C về đúng chỗ
           git clone https://github.com/looppo-p/android_device_xiaomi_gale -b halium-13 device/xiaomi/gale
-          # Bắt đầu tải code (Sẽ mất tầm 30-60 phút)
+          # Bắt đầu tải code (Bước này lâu, anh cứ đi làm chén trà)
           ./repo sync -j$(nproc) --no-clone-bundle
 
-      - name: Build Halium-boot
+      - name: Xây dựng Halium-boot
         run: |
           cd halium
           source build/envsetup.sh
-          # Chọn cấu hình cho máy Gale
+          # Chọn cấu hình cho máy Gale (Redmi 13C)
           lunch halium_gale-userdebug
-          # Xuất xưởng file boot
+          # Ra lệnh cho server đúc file boot
           mka halium-boot
+          
 
